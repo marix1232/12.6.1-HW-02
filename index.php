@@ -47,11 +47,11 @@ $example_persons_array = [
     ],
 ];
 
-function getFullnameFromParts($surname, $namr, $patronymic){
-    return "$surname, $name, $patronymic";
+function getFullnameFromPartsString($surname, $name, $patronymic){
+    return "$surname $name $patronymic";
 }
 
-function getFullnameFromParts($fullname) {
+function getPartsFromFullname($fullname) {
     $parts = explode(' ', $fullname);
     return [
         'surname' => $parts[0],
@@ -62,11 +62,11 @@ function getFullnameFromParts($fullname) {
 
 function getShortName ($fullname) {
     $parts = getPartsFromFullname($fullname);
-    return "$parts[name] " . mb_subster($parts['surname'], 0, 1) . "."
+    return "$parts[name] " . mb_substr($parts['surname'], 0, 1) . ".";
 }
 
 function getGenderFromName($fullname) {
-    $parts = getGenderFromName($fullname);
+    $parts = getPartsFromFullname($fullname);
     $genderScore = 0;
 
     if (mb_substr($parts['patronymic'], -2) === 'ич') $genderScore++;
@@ -94,7 +94,7 @@ function getGenderDescription($personsArray) {
 }
 
 function getPerfectPartner($surname, $name, $patronymic, $personsArray) {
-    $fullname = getFullnameFromParts(ucfirst(mb_strtolower($surname)), ucfirst(mb_strtolower($name)), ucfirst(mb_strtolower($patronymic)));
+    $fullname = getFullnameFromPartsString(ucfirst(mb_strtolower($surname)), ucfirst(mb_strtolower($name)), ucfirst(mb_strtolower($patronymic)));
     $gender = getGenderFromName($fullname);
 
     do {
